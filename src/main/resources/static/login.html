@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <title>酒店订房系统</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="css/glyphicon.css">
+    <!-- Vue.js -->
+    <script src="vue.js"></script>
+    <!-- axios.js -->
+    <script src="axios.min.js"></script>
+
+    
+  </head>
+  <style type="text/css">
+
+    .center-in-center {
+        margin:0 auto;
+    }
+    
+    .tHead{
+    	width:400px;
+    	margin:100px auto 10px auto;
+    	text-align:center;
+    }
+    
+    .tHead h1{
+    	padding:15px;
+    }
+</style>
+  
+  <body background="img/bg.jpg" >
+    <div class="tHead">
+        <h1>酒店客房管理系统</h1>
+    </div>
+
+    <!-- 登录框 -->
+    
+    <div class="container" >
+        <div class="row">
+            <div class="col-md-4  center-in-center" id="login">
+                <div class="card" id="app">
+                    <div class="card-body">
+                        <!-- 登陆、注册按钮 -->
+                        <div class="row">                            
+                            <div class="col-md-6 pr-0" id="userLogin">
+                                <div 
+                                name="" class="btn btn-block btn-primary" style="border-radius: 0;cursor: pointer;">登录</div>
+                            </div>
+                            <div class="col-md-6 pl-0" id="userRegister">
+                                <div name="" class="btn btn-block btn-danger" style="border-radius: 0; cursor: pointer;">注册</div>
+                            </div>
+                        </div>
+                        <!-- 登录 -->
+                        <div class="userLogin">
+                            <div class="form-group mt-4">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input 
+                                            v-model="administrator" type="text"
+                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="手机/用户名/邮箱">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-4"> 
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="glyphicon glyphicon-eye-close"></span>        
+                                    </div>    
+                                    <div class="col-md-10">    
+                                        <input 
+                                            v-model="password" type="password"
+                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="请输入密码">
+                                    </div>        
+                                </div>            
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                            <input style="margin-top:8px;" type="radio" class="form-check-input" name="" id="" value="checkedValue">
+                                            记住密码
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="#" style="display: block;float:right;">忘记密码？</a>
+                                    </div>
+                                </div>
+                            </div>  
+                            <button 
+                            @click="login(administrator,password)"
+                            type="button" name="" id="" class="btn btn-outline-success btn-md btn-block my-4">登录</button>
+                        </div>
+                        <!-- 注册 -->
+                        <div class="userRegister" style="display: none;">
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input 
+                                            v-model="as"
+                                            type="text"
+                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="请输入用户名">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="glyphicon glyphicon-eye-close"></span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input
+                                            v-model="pw" 
+                                            type="password"
+                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="请输入密码">
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <span class="glyphicon glyphicon-phone-alt"></span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input 
+                                            v-model="phone"
+                                            type="text"
+                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="请输入联系方式">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mt-3 ml-3">
+                                <div class="form-check form-check-inline " v-for="g in genders" >
+                                    <label class="form-check-label">
+                                        <input 
+                                        v-model="x"
+                                        class="form-check-input" type="radio"  :value="g">{{g}}
+                                    </label>
+                                </div>       
+                            </div>
+                            <button 
+                            @click="create()"
+                            type="button" class="btn btn-outline-secondary btn-block">注册</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本，用户交互、网络（数据）交互 -->
+    <script>
+        let vm = new Vue({
+            el:"#app",
+            data:{
+            //声明一个成员变量，随后从网络获得数据
+            adminList:new Array(),
+            administrator:'',
+            password:'',
+            genders:['男','女'],
+            as:'',
+            pw:'',
+            phone:'',           
+            x:'',                               
+            },
+            methods: {                
+                create:function(){
+                    axios.post(`/admin`,
+                        {
+                            administrator:this.as,
+                            password:this.pw,
+                            gender:this.x,
+                            phone:this.phone,
+                        }
+                    )
+                    .then(res => {
+                        console.log(res.data)
+                        if(res.data == "ok"){
+                            alert("注册成功!");
+                            location.href="login.html";
+                        }else{
+                            alert("用户名已经被注册！");
+                        }
+
+                    })
+                    .catch(err => {
+                        console.error(err); 
+                    })
+                },
+
+                login:function(administrator,password){
+                    //服务端 发送请求
+                    //http /admin/administrator/password
+                    axios.get(`admin/${administrator}/${password}`)
+                    .then(res => {
+                        // 请求成功
+                        console.log(res.data);  
+                        //  var json = JSON.parse(res);
+                        //  alert(res.data);
+                        //  alert(json.data)
+                        //console.log(typeof(res.data));
+                          if(res.data == "ok"){                        	  
+                        	  //this.$router.push({path:'index.html'});
+                           location.href="index.html";
+                         } else{
+                            alert("用户名和密码不匹配！");
+                          }                                                                      
+                    })
+                    .catch(err => {
+                        console.log(err); 
+                    })
+                    
+                },
+
+            },
+            computed: {
+            
+            },
+           
+        });
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/display.js"></script>
+    
+  </body>
+</html>
